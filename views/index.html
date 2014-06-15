@@ -1,0 +1,86 @@
+<html>
+<head>
+<title>Tweet Ranking System | Home</title>
+
+{{
+  response.files.insert(0,URL('static','css/bootstrap.css'))
+  response.files.insert(0,URL('static','css/bootswatch.min.css'))
+  response.files.insert(0,URL('static','css/main.css'))
+}}
+
+
+
+<script>
+function init() {
+	window.Counter = 0; 
+}
+function pop(x){
+	
+	var s = x.toString();
+	elem = document.getElementById(s); 
+	
+	if (elem.className == "words"){
+		elem.className = "words high"; 
+		window.Counter += 1; 
+	}
+	else{
+		elem.className = "words"; 
+		window.Counter -= 1; 
+	}
+	changeRules();
+}
+function changeRules() {
+	document.getElementById("rules").innerHTML = "Total " + window.Counter.toString() + " selected."; 	
+}
+</script>
+
+</head>
+
+<body onload="init()">
+
+<div class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="../" class="navbar-brand">Tweet PI ranking system</a>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar-main">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="http://www.cse.iitd.ernet.in/~cs1120231/">Contact</a></li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+
+
+<div class="col-md-6"> 
+	<div class="bs-docs-section">
+		<div class="panel panel-info"> 
+			<div class="panel-heading">
+				Tweet
+			</div>
+			<div class="panel-body">
+				<span onclick="pop(1)" id="1" class="words">@JohnDoe</span> <span onclick="pop(2)" id="2" class="words">,</span> <span onclick="pop(3)" id="3" class="words">this</span> <span onclick="pop(4)" id="4" class="words">is</span> <span onclick="pop(5)" id="5" class="words">a</span> <span onclick="pop(6)" id="6" class="words">random</span> <span onclick="pop(7)" id="7" class="words">tweet</span> <span onclick="pop(8)" id="8" class="words">.</span> <span onclick="pop(9)" id="9" class="words">#chill</span> <span onclick="pop(10)" id="10" class="words">#fight</span> 
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="col-md-6"> 
+	<div class="bs-docs-section">
+		<div class="panel panel-warning"> 
+			<div class="panel-heading">
+				Possible Rules
+			</div>
+			<div class="panel-body">
+				<span id="rules"> NA </span>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+</body>
+</html>

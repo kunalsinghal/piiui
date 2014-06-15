@@ -1,0 +1,83 @@
+<html>
+<head>
+<title>Tweet Ranking System | Home</title>
+<link rel="stylesheet" href="{{=URL('static','css/bootstrap.css')}}">
+<link rel="stylesheet" href="{{=URL('static','css/main.css')}}">
+
+
+
+
+<script>
+function init() {
+	window.Counter = 0; 
+}
+function pop(x){
+	
+	var s = x.toString();
+	elem = document.getElementById(s); 
+	
+	if (elem.className == "words"){
+		elem.className = "words high"; 
+		window.Counter += 1; 
+	}
+	else{
+		elem.className = "words"; 
+		window.Counter -= 1; 
+	}
+	changeRules();
+}
+function changeRules() {
+	document.getElementById("rules").innerHTML = "Total " + window.Counter.toString() + " selected."; 	
+}
+</script>
+
+</head>
+
+<body onload="init()">
+
+<div class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="../" class="navbar-brand">Tweet PI ranking system</a>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar-main">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="http://www.cse.iitd.ernet.in/~cs1120231/">Contact</a></li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+
+
+<div class="col-md-6"> 
+	<div class="bs-docs-section">
+		<div class="panel panel-info"> 
+			<div class="panel-heading">
+				Tweet
+			</div>
+			<div class="panel-body">
+				{{=message}}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="col-md-6"> 
+	<div class="bs-docs-section">
+		<div class="panel panel-warning"> 
+			<div class="panel-heading">
+				Possible Rules
+			</div>
+			<div class="panel-body">
+				<span id="rules"> NA </span>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+</body>
+</html>
