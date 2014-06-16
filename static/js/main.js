@@ -28,6 +28,14 @@ function changeRules() {
         data: {arr: str},
         
     }).done(function(data){
-        $('#rules').html(data);
+        var temp = JSON.parse(data); 
+        temp = JSON.parse(temp.arr);
+        var h = "" ; 
+        
+        for(var val in temp){
+            h = h + "<tr><td>" + temp[val] + "</td></tr>"; 
+        }
+        
+        $('#rules').html(h);
     }); 
 }

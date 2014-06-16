@@ -34,7 +34,8 @@ def index():
 def back():
     lis = json.loads(request.vars.arr)
     lis.sort()
-    return str(lis)
+    
+    return  json.dumps({"arr":json.dumps(lis)})
 
 
 
