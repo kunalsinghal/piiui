@@ -15,7 +15,7 @@ def tag(s):
     s = s.replace(',', ' , ').replace('.', ' . ')
     lis = s.split()
     ret = ""
-    cnt = 1
+    cnt = 0
     for x in lis:
         ret += '<span onclick="pop(' + str(cnt) + ')" id="' + str(cnt) + '" class="words">' + x + '</span> '
         cnt += 1
@@ -34,7 +34,8 @@ def index():
 def back():
     lis = json.loads(request.vars.arr)
     lis.sort()
-    
+    print lis, session.tweet
+    lis = map(lambda x: session.tweet[x], lis) 
     return  json.dumps({"arr":json.dumps(lis)})
 
 
