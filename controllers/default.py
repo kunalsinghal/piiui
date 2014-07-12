@@ -11,31 +11,16 @@ import json
 ## - call exposes all registered services (none by default)
 #########################################################################
 
-def tag(s):
-    s = s.replace(',', ' , ').replace('.', ' . ')
-    lis = s.split()
-    ret = ""
-    cnt = 0
-    for x in lis:
-        ret += '<span onclick="pop(' + str(cnt) + ')" id="' + str(cnt) + '" class="words">' + x + '</span> '
-        cnt += 1
-
-    return ret, lis
-
-def getTweet(): 
-    s = "@JohnDoe, this is not a random tweet. #chill #fight"
-    return tag(s)
+getTweet = local_import("helper").getTweet
 
 def index():
     tweet, session.tweet = getTweet()
-    
     return dict(message=XML(tweet))
 
 def back():
     lis = json.loads(request.vars.arr)
     lis.sort()
-    print lis, session.tweet
-    lis = map(lambda x: session.tweet[x], lis) 
+    lis = map(lambda x: session.tweet[x], lis)
     return  json.dumps({"arr":json.dumps(lis)})
 
 
