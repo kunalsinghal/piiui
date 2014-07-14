@@ -11,18 +11,25 @@ import json
 ## - call exposes all registered services (none by default)
 #########################################################################
 
-getTweet = local_import("helper").getTweet
+helper = local_import("helper")
 
 def index():
-    tweet, session.tweet = getTweet()
+    tweet, session.tweet = helper.getTweet()
     return dict(message=XML(tweet))
 
 def back():
     lis = json.loads(request.vars.arr)
     lis.sort()
-    lis = map(lambda x: session.tweet[x], lis)
+
+    lis = map(lambda x: [session.tweet[x], 'op1', 'op2'], lis)
+
+
     return  json.dumps({"arr":json.dumps(lis)})
 
+def nextrule():
+    lis = request.vars.words.split(',')
+    roots = request.vars.base.split(',')
+    print lis, roots
 
 
 def user():

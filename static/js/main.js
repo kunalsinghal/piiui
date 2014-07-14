@@ -32,10 +32,42 @@ function changeRules() {
         temp = JSON.parse(temp.arr);
         var h = "" ;
 
-        for(var val in temp){
-            h = h + "<tr><td>" + temp[val] + "</td></tr>";
+        for(var i = 0; i < temp.length; i ++){
+            h = h + "<tr class='row'>";
+
+            for(var j = 0; j < temp[i].length; j++){
+                var id = temp[i][j] + "-" + temp[i][0] + "-" + i.toString();
+                h = h + "<td class='options' data-root='"+temp[i][0]+"' + id='"+id+"' onclick=\"opted('"+id+"')\">" + temp[i][j] + "</td>";
+            }
+            h = h + "</tr>";
         }
 
         $('#rules').html(h);
     });
 }
+function opted(str){
+    str = '#' + str;
+    $(str).toggleClass('high');
+}
+function recordRule(){
+    var lis = [];
+    var roots = [];
+    $('.options.high').each(function(){
+        lis[lis.length] = $(this).html();
+        roots[roots.length] = $(this).attr('data-root');
+    });
+    $.ajax({
+        type: "POST",
+        url: "nextrule",
+        data: {words: lis.toString(), base: roots.toString()},
+    });
+    window.Counter = 0;
+    window.arr = []
+    $('.high').removeClass('high');
+    changeRules();
+}
+$(document).ready(function(){
+    $('#nextrule').click(function(){
+        recordRule();
+    });
+});
