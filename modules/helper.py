@@ -27,7 +27,9 @@ class Word:
                     return True
             return False
 
-
+class Rule:
+    def __init__(self, lis):
+        self.words = [Word(x[0], x[1]) for x in lis]
 
 
 def tag(s):

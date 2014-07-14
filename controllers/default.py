@@ -29,7 +29,12 @@ def back():
 def nextrule():
     lis = request.vars.words.split(',')
     roots = request.vars.base.split(',')
-    print lis, roots
+    paired = []
+    for i in xrange(len(lis)):
+        paired += [(lis[i] == roots[i], lis[i])]
+    rule = helper.Rule(paired)
+    print len(rule.words)
+
 
 
 def user():
