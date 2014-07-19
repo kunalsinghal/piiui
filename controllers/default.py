@@ -21,7 +21,7 @@ def back():
     lis = json.loads(request.vars.arr)
     lis.sort()
 
-    lis = map(lambda x: [session.tweet[x], 'op1', 'op2'], lis)
+    lis = map(lambda x: [session.tweet[x], 'op2', 'op3'], lis)
 
 
     return  json.dumps({"arr":json.dumps(lis)})
@@ -33,6 +33,8 @@ def nextrule():
     for i in xrange(len(lis)):
         paired += [(lis[i] == roots[i], lis[i])]
     rule = helper.Rule(paired)
+    print "about to call store"
+    helper.store(rule)
     print len(rule.words)
 
 

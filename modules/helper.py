@@ -4,6 +4,7 @@ from pymongo import MongoClient
 
 client = MongoClient("localhost", 27017)
 collection = client.pii.tweets.features
+rdb = client.rules.list
 
 
 
@@ -55,3 +56,15 @@ def tag(s):
 def getTweet():
     s = collection.find_one()['text']
     return tag(s)
+
+def store(rule):
+    print "inside store"
+    print rule, rule.words
+    print rdb.find({'rule' : rule.words}).count()
+    if rdb.find({"rule" : rule.words}).count() > 0:
+        score = rdb.find_one({"rule": rule})["score"] + 1
+        rdb.update({"rule": rule}, {"rule": rule, "score": score})
+    else:
+        rdb.insert({ "rule" : rule, "score" : 10 })
+    print rdb.find_one({'rule' : rule})
+    print "exiting"
