@@ -71,13 +71,8 @@ def getTweet():
     return tag(s)
 
 def store(rule):
-    print "inside STORE"
-    print rule, rule.encode()
-    print rdb.find({'rule' : rule.encode()}).count()
     if rdb.find({"rule" : rule.encode()}).count() > 0:
         score = rdb.find_one({"rule": rule.encode()})["score"] + 1
         rdb.update({"rule": rule.encode()}, {"rule": rule.encode(), "score": score})
     else:
         rdb.insert({ "rule" : rule.encode(), "score" : 10 })
-    print rdb.find_one({'rule' : rule.encode()})
-    print "exiting"
