@@ -66,8 +66,8 @@ def tag(s):
 
     return ret, lis
 
-def getTweet():
-    s = collection.find_one()['text']
+def getTweet(idx):
+    s = collection.find()[idx]['text']
     return tag(s)
 
 def store(rule):

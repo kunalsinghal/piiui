@@ -14,7 +14,8 @@ import json
 helper = local_import("helper")
 
 def index():
-    tweet, session.tweet = helper.getTweet()
+    session.index = 0
+    tweet, session.tweet = helper.getTweet(0)
     return dict(message=XML(tweet))
 
 def back():
@@ -33,7 +34,6 @@ def nextrule():
     for i in xrange(len(lis)):
         paired += [(lis[i] == roots[i], lis[i])]
     rule = helper.Rule(paired)
-    print "about to call store"
     helper.store(rule)
     print len(rule.words)
 

@@ -70,4 +70,8 @@ $(document).ready(function(){
     $('#nextrule').click(function(){
         recordRule();
     });
+    $('#nexttweet').click(function(){
+        recordRule();
+        
+    });
 });
