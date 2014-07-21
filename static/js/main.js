@@ -66,12 +66,22 @@ function recordRule(){
     $('.high').removeClass('high');
     changeRules();
 }
+function changeTweet(){
+    $.ajax({
+        type: "POST",
+        url: "nexttweet"
+    }).done(function(data){
+        console.log(data);
+        $('#tweet').html(data);
+    });
+}
+
 $(document).ready(function(){
     $('#nextrule').click(function(){
         recordRule();
     });
     $('#nexttweet').click(function(){
         recordRule();
-        
+        changeTweet();
     });
 });

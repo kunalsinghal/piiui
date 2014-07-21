@@ -15,7 +15,7 @@ helper = local_import("helper")
 
 def index():
     session.index = 0
-    tweet, session.tweet = helper.getTweet(0)
+    tweet, session.tweet = helper.getTweet(session.index)
     return dict(message=XML(tweet))
 
 def back():
@@ -37,7 +37,10 @@ def nextrule():
     helper.store(rule)
     print len(rule.words)
 
-
+def nexttweet():
+    session.index += 1
+    tweet, session.tweet = helper.getTweet(session.index)
+    return XML(tweet)
 
 def user():
     """
