@@ -2,7 +2,7 @@ from pymongo import MongoClient
 
 
 
-client = MongoClient("localhost", 27017)
+client = MongoClient('localhost', 27017)
 collection = client.pii.tweets.features
 rdb = client.rules.list
 
@@ -28,18 +28,20 @@ class Word:
                     return True
             return False
     def encode(self):
-        return {"isTer": self.isTerminal, "text" : self.text}
+        return {'isTer': self.isTerminal, 'text' : self.text}
+    def out(self):
+        print self.isTerminal, self.text
 
 def decodeWord(a):
-    return Word(a["isTer"], a["text"])
+    return Word(a['isTer'], a['text'])
 
 class Rule:
     def __init__(self, lis):
         self.words = [Word(x[0], x[1]) for x in lis]
     def match(self, tweet):
         i, j = 0, 0
-        while i < len(self.words) and j < len(tweet.features):
-            if self.words[i].match(tweet.features[j]):
+        while i < len(self.words) and j < len(tweet['features']):
+            if self.words[i].match(tweet['features'][j]):
                 i += 1
                 j += 1
             else:
@@ -58,7 +60,7 @@ def decodeRule(a):
 def tag(s):
     s = s.replace(',', ' , ').replace('.', ' . ')
     lis = s.split()
-    ret = ""
+    ret = ''
     cnt = 0
     for x in lis:
         ret += '<span onclick="pop(' + str(cnt) + ')" id="' + str(cnt) + '" class="words">' + x + '</span> '
@@ -70,9 +72,35 @@ def getTweet(idx):
     s = collection.find()[idx]['text']
     return tag(s)
 
-def store(rule):
-    if rdb.find({"rule" : rule.encode()}).count() > 0:
-        score = rdb.find_one({"rule": rule.encode()})["score"] + 1
-        rdb.update({"rule": rule.encode()}, {"rule": rule.encode(), "score": score})
-    else:
-        rdb.insert({ "rule" : rule.encode(), "score" : 10 })
+def store(ruleList, idx):
+    for rule in ruleList:
+        if rdb.find({'rule' : rule.encode()}).count() > 0:
+            score = rdb.find_one({'rule': rule.encode()})['score'] + 2
+            rdb.update({'rule': rule.encode()}, {'rule': rule.encode(), 'score': score})
+        else:
+            rdb.insert({ 'rule' : rule.encode(), 'score' : 10 })
+    tweet = collection.find()[idx]
+    for iter in rdb.find():
+        x = decodeRule(iter['rule'])
+        if x.match(tweet):
+            y = iter
+            y['score'] -= 1
+            rdb.update({'_id': iter['_id']}, y)
+
+
+## calculate score for each tweet
+def calculateScore(tweet):
+    ret = 0
+    for x in rdb.find():
+        y = decodeRule(x['rule'])
+        if y.match(tweet):
+            ret += x['score']
+    return ret
+
+## this function updates score of each tweet
+def rank():
+    for x in collection.find():
+        score  = calculateScore(x)
+        y = x
+        y['score'] = score
+        collection.update({'_id': x['_id']}, y)

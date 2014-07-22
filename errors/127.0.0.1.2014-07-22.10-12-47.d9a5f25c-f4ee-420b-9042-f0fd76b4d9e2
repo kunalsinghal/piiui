@@ -1,0 +1,21 @@
+(dp1
+S'output'
+p2
+S"<type 'exceptions.AttributeError'> Word instance has no attribute 'isTer'"
+p3
+sS'layer'
+p4
+S'/Users/sky/Desktop/web2py/applications/piiui/controllers/default.py'
+p5
+sS'code'
+p6
+S'import json\n\nhelper = local_import("helper")\n\n## function the the first time the page is loaded\ndef index():\n    ## index represents the index of tweet given to the analyst, this needs to be decided by the decision module but for now we are assuming it to be sequential\n    session.index = 0\n    ## flag represents whether the current tweet is marked as contining PII or not. True => contains PII\n    session.flag = False\n    ## ruleList is list of rules as the name suggest\n    session.ruleList = []\n    tweet, session.tweet = helper.getTweet(session.index)\n    return dict(message=XML(tweet))\n\n## function called which returns rules when new words are highlighted / unhighlighted\ndef back():\n    ## arr is the array of words highlighted by the analyst in the current tweet\n    lis = json.loads(request.vars.arr)\n    lis.sort()\n    ## the function in map needs to be changed, ie., op2 and op3 needs to be replaced with actual generalization/features of the words.\n    lis = map(lambda x: [session.tweet[x], \'op2\', \'op3\'], lis)\n    return  json.dumps({"arr":json.dumps(lis)})\n\n## function called when a rule is finalized and more rules are left in the tweet\ndef nextrule():\n    ## words is an array of rule elements encoded as a string, lis is the decoded array.\n    lis = request.vars.words.split(\',\')\n    ## if the rule is an empty rule then chuck\n    if len(request.vars.words) == 0:\n        return None\n    ## if the rule is not an empty rule then it implies that the tweet contains some PII\n    session.flag = True\n    ## base is an array of rule root elements ecoded as string and base is the decoded array.\n    roots = request.vars.base.split(\',\')\n    paired = []\n    ## this loop zips the two arrays\n    for i in xrange(len(lis)):\n        ## first element is a boolean which represents if the rule element is the original plaintext or a genralization\n        paired += [(lis[i] == roots[i], lis[i])]\n    ## rule is the instance of class Rule\n    rule = helper.Rule(paired)\n    ## add use to the current session\n    session.ruleList.append(rule)\n\n\n## function called when a tweet has been completely analyzed\ndef nexttweet():\n    print "in here"\n    ## pushes all the rules learnt till now in the database\n    print session.ruleList, session.index\n    helper.store(session.ruleList, session.index)\n    print "done one"\n    ## this needs to change, a call to decision unit is needed, for now we are assuming sequential call\n    session.index += 1\n    tweet, session.tweet = helper.getTweet(session.index)\n    session.ruleList = []\n    ## revert the PII flag to False ie., no PII\n    session.flag = False\n    return XML(tweet)\n\nresponse._vars=response._caller(nexttweet)\n'
+p7
+sS'snapshot'
+p8
+(dp9
+sS'traceback'
+p10
+S'Traceback (most recent call last):\n  File "/Users/sky/Desktop/web2py/gluon/restricted.py", line 220, in restricted\n    exec ccode in environment\n  File "/Users/sky/Desktop/web2py/applications/piiui/controllers/default.py", line 62, in <module>\n  File "/Users/sky/Desktop/web2py/gluon/globals.py", line 385, in <lambda>\n    self._caller = lambda f: f()\n  File "/Users/sky/Desktop/web2py/applications/piiui/controllers/default.py", line 52, in nexttweet\n    helper.store(session.ruleList, session.index)\n  File "applications/piiui/modules/helper.py", line 91, in store\n    if x.match(tweet):\n  File "applications/piiui/modules/helper.py", line 44, in match\n    x.out()\n  File "applications/piiui/modules/helper.py", line 33, in out\n    print self.isTer, self.text\nAttributeError: Word instance has no attribute \'isTer\'\n'
+p11
+s.
